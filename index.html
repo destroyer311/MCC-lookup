@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>MCC Lookup</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2563eb">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<h3>MCC Lookup</h3>
+
+<button id="installBtn" style="display:none;margin-bottom:8px;">Install App</button>
+
+<div class="tabs">
+  <button id="tabLookup" class="tab active">Lookup</button>
+  <button id="tabCheck" class="tab">10% Check</button>
+</div>
+
+<div id="lookupView">
+  <input id="searchBox" type="text" placeholder="Store name or MCC">
+  <button id="searchBtn">Search</button>
+  <div id="resultBox"></div>
+  <hr>
+  <input id="storeInput" type="text" placeholder="Store Name">
+  <input id="mccInput" type="text" placeholder="MCC">
+  <button id="saveBtn">Save / Update</button>
+</div>
+
+<div id="checkView" style="display:none">
+  <div id="checkResult">
+    Select a result from Lookup tab
+  </div>
+</div>
+
+<script src="popup.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js");
+  });
+}
+
+let deferredPrompt;
+const installBtn = document.getElementById("installBtn");
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = "block";
+});
+
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt = null;
+  installBtn.style.display = "none";
+});
+</script>
+
+</body>
+</html>
